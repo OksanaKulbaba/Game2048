@@ -1,0 +1,82 @@
+@startuml
+
+class KeyAdapter
+class Controller{
+
+Model model;
+View view;
+- {static} final int WINNING_TILE;
++ View getView();
++ int getScore();
++ void resetGame();
++ Tile[][] getGametiles();
++ void keyPressed(KeyEvent e);
+}
+
+class  Model{
+-{static} final int FIELD_WIDTH
+- Tile[][] gameTiles;
+# int score;
+# int maxTile;
+- Stack previousStates;
+- Stack previousScores;
++ boolean isSaveNeeded;
+- void  saveState (Tile[][] tile)
++ void rollback()
++ Model()
++ Tile[][] getGameTiles()
+- void addTile()
+- List<Tile> getEmptyTiles()
+# void resetGameTiles()
+- boolean compressTiles(Tile[] tiles)
+- boolean mergeTiles(Tile[] tiles)
+# void left()
+# void up()
+#  void right()
+#  void down()
+- void canche(int m)
+- void randomMove()
++ boolean hasBoardChanged()
++ int value (Tile[][] tile)
++ MoveEfficiency getMoveEfficiency(Move move)
++ void autoMove()
+}
+class View{
+- {static} final Color;
+- {static} final String FONT_NAME = "Arial";
+- {static} final  int TILE_SIZE = 96;
+- {static} final int TILE_MARGIN = 12;
+- Controller controller;
+ boolean isGameWon = false;
+ boolean isGameLost = false;
++ View(Controller controller)
++ void paint(Graphics g)
+- void drawTile(Graphics g2, Tile tile, int x, int y)
+- {static} int offsetCoors(int arg)
+}
+class MoveEfficiency{
+- int numberOfEmptyTiles, score;
+- Move move;
++ MoveEfficiency(int numberOfEmptyTiles, int score, Move move)
++ Move getMove()
++ int compareTo(MoveEfficiency o)
+}
+class Tile{
+int value
+}
+interface Move{
+{abstract}void move();
+}
+
+KeyAdapter --|>Controller
+JPanel --|>View
+
+Model -left--> View
+View -left--> Controller
+Move --|> MoveEfficiency
+Tile -right--> Model
+Controller --> Model
+MoveEfficiency -left--> Model
+
+
+@enduml
